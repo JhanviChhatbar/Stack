@@ -1,44 +1,39 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class GenerateParentheses {
 
-    // Function to generate valid parentheses sequences
-    static void validParentheses(int n, int open, String curr,
-                                 ArrayList<String> res) {
+    public List<String> generateParenthesis(int n) {
+        List<String> result = new ArrayList<>();
+        backtrack(result, "", 0, 0, n);
+        return result;
+    }
 
-        // If the current sequence has reached the length of 2 * n,
-        // add it to the result
-        if (curr.length() == 2 * n) {
-            res.add(curr);
+    private void backtrack(List<String> result, String current, int open, int close, int n) {
+        if (current.length() == 2 * n) {
+            result.add(current);
             return;
         }
 
-        // Add opening parenthesis if we haven't used all n opening
-        // parentheses
-        if (open < n)
-            validParentheses(n, open + 1, curr + "(", res);
+        if (open < n) {
+            backtrack(result, current + "(", open + 1, close, n);
+        }
 
-        // Add closing parenthesis if the number of
-        // closing parentheses is less than the number of opening ones
-        if (curr.length() - open < open)
-            validParentheses(n, open, curr + ")", res);
-    }
-
-    // Function to return all valid parentheses sequences
-    static ArrayList<String> generateParentheses(int n) {
-        ArrayList<String> res = new ArrayList<>();
-
-        // Start recursion with 0 open parentheses and an empty string
-        validParentheses(n/2, 0, "", res);
-        return res;
+        if (close < open) {
+            backtrack(result, current + ")", open, close + 1, n);
+        }
     }
 
     public static void main(String[] args) {
-        int n = 4;
-        ArrayList<String> res = generateParentheses(n);
+        GenerateParentheses obj = new GenerateParentheses();
 
-        for (String seq : res) {
-            System.out.println(seq);
+        int n = 2;  // 👈 change this to test
+
+        List<String> result = obj.generateParenthesis(n);
+
+        System.out.println("All combinations:");
+        for (String s : result) {
+            System.out.println(s);
         }
     }
 }
